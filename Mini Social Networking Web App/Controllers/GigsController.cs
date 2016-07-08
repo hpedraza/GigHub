@@ -17,6 +17,7 @@ namespace Mini_Social_Networking_Web_App.Controllers
         }
 
         [Authorize]
+
         public ActionResult Create()
         {
             var viewModel = new GigFromViewModel
@@ -30,6 +31,7 @@ namespace Mini_Social_Networking_Web_App.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(GigFromViewModel vm)
         {
             if (!ModelState.IsValid)
