@@ -194,6 +194,10 @@
     <Compile Include="Migrations\201607042026545_AddPropertyToGig.Designer.cs">
       <DependentUpon>201607042026545_AddPropertyToGig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607101928215_AddNameToApplicationUser.cs" />
+    <Compile Include="Migrations\201607101928215_AddNameToApplicationUser.Designer.cs">
+      <DependentUpon>201607101928215_AddNameToApplicationUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\DbContext.cs" />
@@ -205,6 +209,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\FutureDate.cs" />
     <Compile Include="ViewModels\GigFromViewModel.cs" />
+    <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\ValidTime.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -290,6 +295,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607042026545_AddPropertyToGig.resx">
       <DependentUpon>201607042026545_AddPropertyToGig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607101928215_AddNameToApplicationUser.resx">
+      <DependentUpon>201607101928215_AddNameToApplicationUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

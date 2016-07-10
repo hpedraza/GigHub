@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mini_Social_Networking_Web_App.Models
@@ -12,6 +13,8 @@ namespace Mini_Social_Networking_Web_App.Models
 
         [Required]
         public string ArtistId { get; set; }
+
+        [Required]
         public DateTime DateTime { get; set; }
 
         [Required]
