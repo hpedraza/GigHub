@@ -21,6 +21,7 @@ namespace Mini_Social_Networking_Web_App.Controllers
         {
             var upcomingGigs = _context.Gigs
                 .Include(global => global.Artist)
+                .Include(g => g.Genre)
                 .Where(g => g.DateTime > DateTime.Now);
             return View(upcomingGigs);
         }
