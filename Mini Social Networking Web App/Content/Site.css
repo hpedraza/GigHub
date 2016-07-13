@@ -70,9 +70,7 @@ h6,
     padding: 7px 20px;
 }
 
-.btn{
-    /* left blank for now, delete soon */
-}
+
 
 .form-control:focus{
     border-color: #2196F3;
@@ -165,9 +163,6 @@ span.field-validation-error{
     height:inherit;
 }
 
-.gigs > li .details .genre .js-toggle-attendance{
-    
-}
 
 .flex-container{
     display: flex;
