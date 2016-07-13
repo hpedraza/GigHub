@@ -13,6 +13,8 @@ namespace Mini_Social_Networking_Web_App.Models
         [StringLength(100)]
         public string Name { get; set; }
 
+
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

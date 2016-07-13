@@ -9,4 +9,6 @@ namespace Mini_Social_Networking_Web_App.DTO
     {
         public int GigId { get; set; }
     }
+
+
 }

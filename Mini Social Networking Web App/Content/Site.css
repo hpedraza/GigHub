@@ -124,6 +124,13 @@ span.field-validation-error{
     font-weight: bold;
 }
 
+.gigs > li .detail .follow{
+    position: absolute;
+    top: 0;
+    right: 0;
+
+}
+
 .gigs > li .details .genre{
     font-size: 15px;
 }
