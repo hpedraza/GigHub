@@ -1,11 +1,11 @@
-﻿@model IEnumerable<Mini_Social_Networking_Web_App.Models.Gig>
+﻿@model Mini_Social_Networking_Web_App.ViewModels.GigsViewModel
 
 @{
     ViewBag.Title = "Home Page";
 }
-
-<ul class="gigs flex-container">
-    @foreach (var gig in Model)
+<h1>Model.Heading</h1>
+<ul class="gigs flex-container" style="margin-top: 40px;">
+    @foreach (var gig in Model.UpcomingGigs)
     {
         <li class="flex-item-container">
             <div class="date flex-item">
@@ -18,10 +18,20 @@
             </div>
             <div class="details flex-item">
                 <span class="artist">
-                    @gig.Artist.Name <button data-artist-id="@gig.ArtistId" class="btn btn-link btn-sm js-toggle-following pull-right">Follow</button>
+                    @gig.Artist.Name 
+                    @if (Model.ShowActions)
+                    {
+                        <button data-artist-id="@gig.ArtistId" class="btn btn-link btn-sm js-toggle-following pull-right">Follow</button>
+                    }
+
                 </span>
                 <span class="genre">
-                    @gig.Genre.Name <button data-gig-id="@gig.Id" class="btn btn-sm btn-default js-toggle-attendance pull-right">Going ?</button>
+                    @gig.Genre.Name
+                    @if (Model.ShowActions)
+                    {
+                        <button data-gig-id="@gig.Id" class="btn btn-sm btn-default js-toggle-attendance pull-right">Going ?</button>
+                    }
+
                 </span>
 
             </div>

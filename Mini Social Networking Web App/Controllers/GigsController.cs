@@ -3,7 +3,7 @@ using Mini_Social_Networking_Web_App.Models;
 using Mini_Social_Networking_Web_App.ViewModels;
 using System.Linq;
 using System.Web.Mvc;
-
+using System.Data.Entity;
 namespace Mini_Social_Networking_Web_App.Controllers
 {
     public class GigsController : Controller
@@ -16,8 +16,29 @@ namespace Mini_Social_Networking_Web_App.Controllers
             _context = new ApplicationDbContext();
         }
 
-        [Authorize]
 
+        [Authorize]
+        public ActionResult Attending()
+        {
+            var userId = User.Identity.GetUserId();
+            var gigs = _context.Attendances
+                .Where(a => a.AttendeeId == userId)
+                .Select(a => a.Gig)
+                .Include(g => g.Artist).
+                Include(g => g.Genre)
+                .ToList();
+
+            var vm = new GigsViewModel
+            {
+                UpcomingGigs = gigs,
+                ShowActions = User.Identity.IsAuthenticated,
+                Heading = "Gigs I'm Attending"
+            };
+
+            return View("Gigs",vm);
+        }
+
+        [Authorize]
         public ActionResult Create()
         {
             var viewModel = new GigFromViewModel

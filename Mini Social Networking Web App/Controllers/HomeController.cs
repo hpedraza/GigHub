@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
-
+using Mini_Social_Networking_Web_App.ViewModels;
 
 namespace Mini_Social_Networking_Web_App.Controllers
 {
@@ -23,7 +23,14 @@ namespace Mini_Social_Networking_Web_App.Controllers
                 .Include(global => global.Artist)
                 .Include(g => g.Genre)
                 .Where(g => g.DateTime > DateTime.Now);
-            return View(upcomingGigs);
+
+            var viewModel = new GigsViewModel
+            {
+                UpcomingGigs = upcomingGigs,
+                ShowActions = User.Identity.IsAuthenticated,
+                Heading = "Upcoming Gigs"
+            };
+            return View("Gigs" , viewModel);
         }
 
         public ActionResult About()
