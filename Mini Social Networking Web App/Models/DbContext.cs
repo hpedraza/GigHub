@@ -9,6 +9,8 @@ namespace Mini_Social_Networking_Web_App.Models
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Followings> Followings { get; set; }
+        
+
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
@@ -27,10 +29,22 @@ namespace Mini_Social_Networking_Web_App.Models
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Followings>()
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.Followees)
+                .WithRequired(f => f.Follower)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ApplicationUser>()
+                 .HasMany(u => u.Followers)
+                 .WithRequired(f => f.Followee)
+                 .WillCascadeOnDelete(false);
+
+        /*--
+             modelBuilder.Entity<Followings>()
                 .HasRequired(a => a.Follower)
                 .WithMany()
-                .WillCascadeOnDelete(false);
+                .WillCascadeOnDelete(false); 
+        --*/
 
             base.OnModelCreating(modelBuilder);
         }

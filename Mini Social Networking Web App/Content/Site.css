@@ -64,9 +64,14 @@ h6,
     font-size: 17px;
     padding: 20px 15px;
 }
-.btn{
+
+.gig-create-btn{
     font-size: 17px;
     padding: 7px 20px;
+}
+
+.btn{
+    /* left blank for now, delete soon */
 }
 
 .form-control:focus{
@@ -106,6 +111,7 @@ span.field-validation-error{
 /* Page-level Styles */
 .gigs{
     list-style: none;
+    
 }
 
 .gigs > li{
@@ -117,28 +123,28 @@ span.field-validation-error{
     position: absolute;
     top: 0;
     left: 70px;
+
 }
 
 .gigs > li .details .artist{
     display: block;
     font-weight: bold;
+    padding-bottom: 6px;
 }
 
-.gigs > li .detail .follow{
-    position: absolute;
-    top: 0;
-    right: 0;
 
-}
 
 .gigs > li .details .genre{
     font-size: 15px;
+    display: block;
+
+
 }
 .gigs > li .date .month{
     text-transform: uppercase;
     font-size: 14px;
     font-weight: bold;
-    padding: 2px 6px;
+    padding: 5px 6px;
 }
 
 .gigs > li .date .day{
@@ -155,4 +161,31 @@ span.field-validation-error{
     width: 60px;
     border-radius: 8px;
     -ms-border-radius: 8px;
+
+    height:inherit;
+}
+
+.gigs > li .details .genre .js-toggle-attendance{
+    
+}
+
+.flex-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+}
+
+.flex-item-container{
+    display: flex;
+    flex-direction: row;
+    align-content: flex-start;
+}
+
+.flex-item{
+    width: 265px;
+    height: 100px;
+    flex-basis: auto;
+    flex-grow: inherit;
 }

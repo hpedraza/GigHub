@@ -10,6 +10,7 @@ using System.Web.Http;
 
 namespace Mini_Social_Networking_Web_App.Controllers
 {
+    [Authorize]
     public class FollowingController : ApiController
     {
         private ApplicationDbContext _context;

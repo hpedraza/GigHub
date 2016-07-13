@@ -4,11 +4,11 @@
     ViewBag.Title = "Home Page";
 }
 
-<ul class="gigs">
+<ul class="gigs flex-container">
     @foreach (var gig in Model)
     {
-        <li>
-            <div class="date">
+        <li class="flex-item-container">
+            <div class="date flex-item">
                 <div class="month">
                     @gig.DateTime.ToString("MMM")
                 </div>
@@ -16,15 +16,14 @@
                     @gig.DateTime.ToString("d ")
                 </div>
             </div>
-            <div class="details">
+            <div class="details flex-item">
                 <span class="artist">
-                    @gig.Artist.Name
+                    @gig.Artist.Name <button data-artist-id="@gig.ArtistId" class="btn btn-link btn-sm js-toggle-following pull-right">Follow</button>
                 </span>
                 <span class="genre">
-                    @gig.Genre.Name
+                    @gig.Genre.Name <button data-gig-id="@gig.Id" class="btn btn-sm btn-default js-toggle-attendance pull-right">Going ?</button>
                 </span>
-                <button data-artist-id="@gig.ArtistId" class="btn btn-link js-toggle-following">Follow</button>
-                <button data-gig-id="@gig.Id" class="btn btn-sm pull-right btn-default js-toggle-attendance">Going ?</button>
+
             </div>
         </li>
     }
