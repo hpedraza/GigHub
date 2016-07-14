@@ -4,6 +4,8 @@ using Mini_Social_Networking_Web_App.ViewModels;
 using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
+using System.Collections.Generic;
+
 namespace Mini_Social_Networking_Web_App.Controllers
 {
     public class GigsController : Controller
@@ -15,6 +17,35 @@ namespace Mini_Social_Networking_Web_App.Controllers
             
             _context = new ApplicationDbContext();
         }
+
+        [Authorize]
+        public ActionResult Following()
+        {
+            var userId = User.Identity.GetUserId();
+            var FolloweeIds = _context.Followings.Where(u => u.FollowerId == userId).Select(u => u.FolloweeId).ToList();
+            IList<FollowingViewModel> viewModel = new List<FollowingViewModel>();
+
+            for(int i = 0; i < FolloweeIds.Count; i++)
+            {
+                string id = FolloweeIds[i];
+                var userName = _context.Users.Where( u=>u.Id == id ).Select(u => u.Name).Single<string>();
+
+                if (userName != null)
+                {
+                    viewModel.Add(new FollowingViewModel {
+                        UserName = userName,
+                        Id = id
+                          
+                    });
+                }
+
+
+            }
+
+            return View(viewModel);
+
+        }
+
 
 
         [Authorize]
