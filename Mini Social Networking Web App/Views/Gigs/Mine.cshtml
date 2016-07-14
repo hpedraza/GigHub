@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Mini_Social_Networking_Web_App.Models.Gig>
+@{
+    ViewBag.Title = "Mine";
+}
+
+<h2>My Upcoming Gigs</h2>
+
+<ul class="gigs flex-container" style="margin-top: 40px;">
+    @foreach (var gig in Model)
+    {
+        <li class="flex-item-container">
+            <div class="date flex-item">
+                <div class="month">
+                    @gig.DateTime.ToString("MMM")
+                </div>
+                <div class="day">
+                    @gig.DateTime.ToString("d ")
+                </div>
+            </div>
+            <div class="details flex-item">
+                <span class="artist">
+                    @gig.Venue
+                </span>
+                <span class="genre">
+                    @gig.Genre.Name
+                </span>
+
+            </div>
+        </li>
+    }
+</ul>

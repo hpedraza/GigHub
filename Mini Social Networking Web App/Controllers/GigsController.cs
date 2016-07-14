@@ -5,12 +5,14 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
 using System.Collections.Generic;
+using System;
 
 namespace Mini_Social_Networking_Web_App.Controllers
 {
     public class GigsController : Controller
     {
         private readonly ApplicationDbContext _context;
+
         public GigsController()
         {
             // worrt about Dependency Injection, repository pattern later 
@@ -19,33 +21,16 @@ namespace Mini_Social_Networking_Web_App.Controllers
         }
 
         [Authorize]
-        public ActionResult Following()
+        public ActionResult Mine()
         {
             var userId = User.Identity.GetUserId();
-            var FolloweeIds = _context.Followings.Where(u => u.FollowerId == userId).Select(u => u.FolloweeId).ToList();
-            IList<FollowingViewModel> viewModel = new List<FollowingViewModel>();
+            var gigs = _context.Gigs
+                .Where(g => g.ArtistId == userId && g.DateTime > DateTime.Now)
+                .Include(g => g.Genre)
+                .ToList();
 
-            for(int i = 0; i < FolloweeIds.Count; i++)
-            {
-                string id = FolloweeIds[i];
-                var userName = _context.Users.Where( u=>u.Id == id ).Select(u => u.Name).Single<string>();
-
-                if (userName != null)
-                {
-                    viewModel.Add(new FollowingViewModel {
-                        UserName = userName,
-                        Id = id
-                          
-                    });
-                }
-
-
-            }
-
-            return View(viewModel);
-
+            return View(gigs);
         }
-
 
 
         [Authorize]
@@ -104,7 +89,7 @@ namespace Mini_Social_Networking_Web_App.Controllers
             _context.Gigs.Add(gig);
             _context.SaveChanges();
 
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Mine","Gigs");
 
         }
 
