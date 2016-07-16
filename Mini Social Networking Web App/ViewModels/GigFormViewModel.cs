@@ -37,6 +37,7 @@ namespace Mini_Social_Networking_Web_App.ViewModels
             {
                 Expression<Func<GigsController, ActionResult>> update = 
                     (c => c.Update(this));
+
                 Expression<Func<GigsController, ActionResult>> create =
                         (c => c.Create(this));
 

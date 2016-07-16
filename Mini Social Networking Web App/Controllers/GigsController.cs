@@ -25,7 +25,9 @@ namespace Mini_Social_Networking_Web_App.Controllers
         {
             var userId = User.Identity.GetUserId();
             var gigs = _context.Gigs
-                .Where(g => g.ArtistId == userId && g.DateTime > DateTime.Now)
+                .Where(g => g.ArtistId == userId && 
+                       g.IsCanceled != true &&
+                       g.DateTime > DateTime.Now)
                 .Include(g => g.Genre)
                 .ToList();
 
@@ -127,10 +129,10 @@ namespace Mini_Social_Networking_Web_App.Controllers
             }
 
             var userId = User.Identity.GetUserId();
+
             var gig = _context.Gigs.Single(
                     g => g.Id == vm.Id && g.ArtistId == userId
                 );
-
 
             gig.Venue = vm.Venue;
             gig.DateTime = vm.GetDateTime();

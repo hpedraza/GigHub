@@ -18,16 +18,26 @@
             </div>
             <div class="details flex-item">
                 <span class="artist">
-                    @gig.Artist.Name 
+                    @gig.Artist.Name
+
+
                     @if (Model.ShowActions)
                     {
-                        <button data-artist-id="@gig.ArtistId" class="btn btn-link btn-sm js-toggle-following pull-right">Follow</button>
+                        if (@gig.IsCanceled)
+                        {
+                            <span class="label label-warning pull-right">Canceled</span>
+                        }
+                        else
+                        {
+                            <button data-artist-id="@gig.ArtistId" class="btn btn-link btn-sm js-toggle-following pull-right">Follow</button>
+                        }
+
                     }
 
                 </span>
                 <span class="genre">
                     @gig.Genre.Name
-                    @if (Model.ShowActions)
+                    @if (Model.ShowActions && !gig.IsCanceled)
                     {
                         <button data-gig-id="@gig.Id" class="btn btn-sm btn-default js-toggle-attendance pull-right">Going ?</button>
                     }
