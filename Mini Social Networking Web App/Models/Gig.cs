@@ -8,6 +8,7 @@ namespace Mini_Social_Networking_Web_App.Models
     {
         public int Id { get; set; }
 
+        public bool IsCanceled { get; set; }
         
         public ApplicationUser Artist { get; set; }
 

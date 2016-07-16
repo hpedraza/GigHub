@@ -27,9 +27,64 @@
                 <div class="actions">
                     <a href="@Url.Action("Edit", "Gigs", new { id = gig.Id })">
                         Edit
+                    </a> |
+                    <a data-gig-id="@gig.Id" class="cancel" data-toggle="modal" href="#">
+                        Cancel
                     </a>
                 </div>
             </div>
         </li>
     }
 </ul>
+
+<!-- Modal -->
+<div id="alertModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Are you sure you want to cancel gig?</h4>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" id="yes" value="">Yes</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section scripts{
+    
+    <script>
+        $(document).ready(function () {
+            $(".cancel").click(function (e) {
+                var link = $(e.target);
+                var dataGigId = link.attr("data-gig-id");
+                $('#yes').val(dataGigId);
+                $("#alertModal").modal("show");
+            });
+
+            $("#yes").click(function (e) {
+                var id = $(this).attr("value");
+                cancelGig(id);
+            });
+
+            function cancelGig(id) {
+                    $.ajax({
+                        url: "/api/gigs/" + id,
+                        method: "DELETE"
+                    })
+                   .done(function () {
+                       $("#alertModal").modal("hide");
+                       var query = "[data-gig-id=" + id + "]";
+                       $(query).parents("li").fadeOut();
+                   })
+                   .fail(function () {
+                       alert("Something failed!");
+                   });
+            }
+        });
+    </script>    
+}
