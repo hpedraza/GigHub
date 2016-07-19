@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -177,12 +181,14 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\MappingProfile.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\GigsController.cs" />
     <Compile Include="Controllers\Api\AttendancesController.cs" />
+    <Compile Include="Controllers\Api\NotificationsController.cs" />
     <Compile Include="Controllers\FolloweesController.cs" />
     <Compile Include="Controllers\Api\FollowingController.cs" />
     <Compile Include="Controllers\GigsController.cs" />
@@ -190,6 +196,10 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DTO\AttendanceDTO.cs" />
     <Compile Include="DTO\FolloweeDTO.cs" />
+    <Compile Include="DTO\GenreDTO.cs" />
+    <Compile Include="DTO\GigDTO.cs" />
+    <Compile Include="DTO\NotificationDTO.cs" />
+    <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -233,8 +243,19 @@
     <Compile Include="Migrations\201607152042260_AddIsCanceledToGig.Designer.cs">
       <DependentUpon>201607152042260_AddIsCanceledToGig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607162310521_AddNotification.cs" />
+    <Compile Include="Migrations\201607162310521_AddNotification.Designer.cs">
+      <DependentUpon>201607162310521_AddNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607162318355_AddNotification1.cs" />
+    <Compile Include="Migrations\201607162318355_AddNotification1.Designer.cs">
+      <DependentUpon>201607162318355_AddNotification1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Followings.cs" />
+    <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\NotificationType.cs" />
+    <Compile Include="Models\UserNotification.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\Attendance.cs" />
     <Compile Include="Models\DbContext.cs" />
@@ -354,6 +375,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607152042260_AddIsCanceledToGig.resx">
       <DependentUpon>201607152042260_AddIsCanceledToGig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607162310521_AddNotification.resx">
+      <DependentUpon>201607162310521_AddNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607162318355_AddNotification1.resx">
+      <DependentUpon>201607162318355_AddNotification1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

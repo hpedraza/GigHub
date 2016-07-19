@@ -12,7 +12,6 @@ using Mini_Social_Networking_Web_App.DTO;
 namespace Mini_Social_Networking_Web_App.Controllers
 {
 
-
     [Authorize]
     public class AttendancesController : ApiController
     {

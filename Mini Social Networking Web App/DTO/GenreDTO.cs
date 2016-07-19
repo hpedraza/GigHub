@@ -5,8 +5,9 @@ using System.Web;
 
 namespace Mini_Social_Networking_Web_App.DTO
 {
-    public class AttendanceDTO
+    public class GenreDTO
     {
-        public int GigId { get; set; }
+        public byte Id { get; set; }
+        public string Name { get; set; }
     }
 }

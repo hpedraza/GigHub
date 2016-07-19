@@ -9,7 +9,8 @@ namespace Mini_Social_Networking_Web_App.Models
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Followings> Followings { get; set; }
-        
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
 
 
         public ApplicationDbContext()
@@ -26,7 +27,7 @@ namespace Mini_Social_Networking_Web_App.Models
         {
             modelBuilder.Entity<Attendance>()
                 .HasRequired(a => a.Gig)
-                .WithMany()
+                .WithMany(g => g.Attendances)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ApplicationUser>()
@@ -39,6 +40,11 @@ namespace Mini_Social_Networking_Web_App.Models
                  .WithRequired(f => f.Followee)
                  .WillCascadeOnDelete(false);
 
+
+            modelBuilder.Entity<UserNotification>()
+                .HasRequired(u => u.User)
+                .WithMany(u => u.UserNotifications)
+                .WillCascadeOnDelete(false);
         /*--
              modelBuilder.Entity<Followings>()
                 .HasRequired(a => a.Follower)

@@ -59,13 +59,7 @@ namespace Mini_Social_Networking_Web_App.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            var viewModel = new GigFormViewModel
-            {
-                Genres = _context.Genres.ToList(),
-                Heading = "Add A Gig"
-            };
-        
-        
+            var viewModel = new GigFormViewModel(_context.Genres.ToList() , "Add a Gig");
             return View("GigForm" , viewModel);
         }
 
@@ -75,17 +69,13 @@ namespace Mini_Social_Networking_Web_App.Controllers
             var userId = User.Identity.GetUserId();
             var gig = _context.Gigs.Single(g => g.Id == id && g.ArtistId == userId);
 
-            var viewModel = new GigFormViewModel
-            {
-                Id = gig.Id,
-                Genres = _context.Genres.ToList(),
-                Date = gig.DateTime.ToString("d MMM yyyy"),
-                Time = gig.DateTime.ToString("HH:MM"),
-                Genre = gig.GenreId,
-                Venue = gig.Venue,
-                Heading = "Edit Gig"
-            };
-
+            var viewModel = new GigFormViewModel(gig.Id , 
+                _context.Genres.ToList() , 
+                gig.DateTime.ToString("d MMM yyyy"), 
+                gig.DateTime.ToString("HH:MM"),
+                gig.GenreId, 
+                gig.Venue,
+                "Edit Gig");
 
             return View("GigForm",viewModel);
         }
@@ -97,18 +87,13 @@ namespace Mini_Social_Networking_Web_App.Controllers
         {
             if (!ModelState.IsValid)
             {
-                vm.Genres = _context.Genres.ToList();
+                vm.SetGenresList(_context.Genres.ToList());
                 return View("GigForm", vm);
             }
-                
 
-            var gig = new Gig
-            {
-                ArtistId = User.Identity.GetUserId(),
-                GenreId = vm.Genre,
-                DateTime = vm.GetDateTime(),
-                Venue = vm.Venue
-            };
+            // create constructor for create
+            string userId = User.Identity.GetUserId();
+            var gig = new Gig(userId, vm.Genre , vm.GetDateTime() , vm.Venue);
 
             _context.Gigs.Add(gig);
             _context.SaveChanges();
@@ -124,19 +109,17 @@ namespace Mini_Social_Networking_Web_App.Controllers
         {
             if (!ModelState.IsValid)
             {
-                vm.Genres = _context.Genres.ToList();
+                vm.SetGenresList(_context.Genres.ToList());
                 return View("GigForm", vm);
             }
 
             var userId = User.Identity.GetUserId();
 
-            var gig = _context.Gigs.Single(
-                    g => g.Id == vm.Id && g.ArtistId == userId
-                );
+            var gig = _context.Gigs
+                .Include(g=>g.Attendances.Select(a => a.Attendee))
+                .Single(g => g.Id == vm.Id && g.ArtistId == userId);
 
-            gig.Venue = vm.Venue;
-            gig.DateTime = vm.GetDateTime();
-            gig.GenreId = vm.Genre;
+            gig.UpdateGig(vm.Venue, vm.GetDateTime() , vm.Genre);
 
             _context.SaveChanges();
 

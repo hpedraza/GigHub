@@ -17,11 +17,13 @@ namespace Mini_Social_Networking_Web_App.Models
 
         public ICollection<Followings> Followers { get; set; }
         public ICollection<Followings> Followees { get; set; }
+        public ICollection<UserNotification> UserNotifications { get; set; }
 
         public ApplicationUser()
         {
             Followers = new Collection<Followings>();
             Followees = new Collection<Followings>();
+            UserNotifications = new Collection<UserNotification>();
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -31,6 +33,11 @@ namespace Mini_Social_Networking_Web_App.Models
             // Add custom user claims here
             return userIdentity;
         }
+        public void Notify(Notification notification)
+        {
+            UserNotifications.Add(new UserNotification(this, notification));
+        }
+
     }
 
 
