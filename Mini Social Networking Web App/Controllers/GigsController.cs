@@ -93,8 +93,17 @@ namespace Mini_Social_Networking_Web_App.Controllers
 
             // create constructor for create
             string userId = User.Identity.GetUserId();
-            var gig = new Gig(userId, vm.Genre , vm.GetDateTime() , vm.Venue);
+            var Followers = (from user in _context.Users
+                             where user.Id == userId
+                             from follower in user.Followers
+                             from nu in _context.Users
+                             where nu.Id == follower.FollowerId
+                             select nu).ToList(); 
 
+
+
+
+var gig = new Gig(userId, vm.Genre , vm.GetDateTime() , vm.Venue, Followers);
             _context.Gigs.Add(gig);
             _context.SaveChanges();
 

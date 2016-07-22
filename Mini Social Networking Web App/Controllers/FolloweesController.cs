@@ -35,7 +35,6 @@ namespace Mini_Social_Networking_Web_App.Controllers
                     {
                         UserName = userName,
                         Id = id
-
                     });
                 }
 

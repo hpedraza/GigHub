@@ -21,7 +21,7 @@ namespace Mini_Social_Networking_Web_App.Models
 
         public Notification Notification { get; private set; }
 
-        public bool IsRead { get; set; }
+        public bool IsRead { get; private set; }
 
         protected UserNotification()
         {
@@ -37,6 +37,11 @@ namespace Mini_Social_Networking_Web_App.Models
 
             Notification = notification;
             User = user;
+        }
+
+        public void MarkAsRead()
+        {
+            this.IsRead = true;
         }
 
     }

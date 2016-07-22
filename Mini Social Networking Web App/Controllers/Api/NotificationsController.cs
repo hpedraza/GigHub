@@ -23,7 +23,7 @@ namespace Mini_Social_Networking_Web_App.Controllers.Api
             _context = new ApplicationDbContext();
         }
 
-        [HttpPost]
+
         public IEnumerable<NotificationDTO> GetNewNotifications()
         {
             var userId = User.Identity.GetUserId();
@@ -33,7 +33,16 @@ namespace Mini_Social_Networking_Web_App.Controllers.Api
                 .Include(n => n.Gig.Artist)
                 .ToList();
 
-            return notifications.Select(Mapper.Map<Notification,NotificationDTO>);
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<ApplicationUser, UserDTO>();
+                cfg.CreateMap<Gig, GigDTO>();
+                cfg.CreateMap<Notification, NotificationDTO>();
+            });
+     
+            IMapper mapper = config.CreateMapper();
+
+
+            return notifications.Select(mapper.Map<Notification,NotificationDTO>);
         }
     }
 }

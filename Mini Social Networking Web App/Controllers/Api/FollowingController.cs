@@ -33,6 +33,8 @@ namespace Mini_Social_Networking_Web_App.Controllers
                 FollowerId = userId,
                 FolloweeId = dto.ArtistId
             };
+
+            following.AddToUsersFollowingsCollection();
             _context.Followings.Add(following);
             _context.SaveChanges();
 
