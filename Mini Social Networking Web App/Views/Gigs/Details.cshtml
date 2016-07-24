@@ -1,0 +1,104 @@
+﻿@model Mini_Social_Networking_Web_App.ViewModels.GigDetailsViewModel
+
+@{
+    ViewBag.Title = "Details on Gig";
+}
+<h1>@Model.Artist Gig Details </h1>
+
+<ul class="gigs flex-container" style="margin-top: 40px;">
+    <li class="flex-item-container">
+        <div class="date flex-item">
+            <div class="month">
+                @Model.Date.ToString("MMM")
+            </div>
+            <div class="day">
+                @Model.Date.ToString("d ")
+            </div>
+        </div>
+        <div class="details flex-item">
+            <span class="artist">
+                @Model.Artist
+
+                @if (Model.IsAuthenticated)
+                {
+                    if (!Model.IsFollowing)
+                    {
+                        <button data-artist-id="@Model.ArtistId" class="btn btn-link btn-sm js-toggle-following pull-right">Follow</button>
+                    }
+                    else
+                    {
+                        <button data-artist-id="@Model.ArtistId" class="btn btn-info btn-sm js-toggle-following pull-right">Following</button>
+                    }
+                }
+            </span>
+
+            <span class="genre">
+                Performing at <span class="highlight">@Model.Venue</span> on <span class="highlight">@Model.Date.ToString("MMMM, dd yyyy")</span> at <span class="highlight">@Model.Date.ToString("t")</span>. 
+            </span>
+
+            <div class="">
+                @if (Model.IsAttendding)
+                {
+                    <p>You are attenfing the event.</p>
+                }
+            </div>
+
+        </div>
+    </li>
+
+</ul>
+
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $(".js-toggle-attendance").click( function(e) {
+                var button = $(e.target);
+                $.post("/api/attendances", { GigId: button.attr("data-gig-id") })
+                .done(function () {
+                    button
+                        .removeClass("btn-default")
+                        .addClass("btn-info")
+                        .text("Going");
+                })
+                .fail(function (ex) {
+                    alert(ex);
+                });
+            });
+
+            $(".js-toggle-following").click(function (e) {
+                var button = $(e.target);
+
+                var dto = {
+                    ArtistId: button.attr("data-artist-id")
+                }
+                if (button.text() === "Follow") {
+                    dto.Follow = true;
+                } else {
+                    dto.Follow = false;
+                }
+               
+                $.post("/api/following", dto)
+                .done(function (IsFollowing) {
+                    if (IsFollowing) {
+                        button
+                            .text("Following")
+                            .removeClass("btn-link")
+                            .addClass("btn-info");
+                    } else {
+                        button
+                            .text("Follow")
+                            .removeClass("btn-info")
+                            .addClass("btn-link");
+                    }
+
+                })
+                .fail(function (ex) {
+                    console.log(ex);
+                });
+            });
+
+        });
+    </script>
+}

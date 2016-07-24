@@ -45,12 +45,12 @@ namespace Mini_Social_Networking_Web_App.Models
                 .HasRequired(u => u.User)
                 .WithMany(u => u.UserNotifications)
                 .WillCascadeOnDelete(false);
-        /*--
+
              modelBuilder.Entity<Followings>()
                 .HasRequired(a => a.Follower)
-                .WithMany()
+                .WithMany(a => a.Followees)
                 .WillCascadeOnDelete(false); 
-        --*/
+
 
             base.OnModelCreating(modelBuilder);
         }

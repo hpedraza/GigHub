@@ -46,14 +46,28 @@ namespace Mini_Social_Networking_Web_App.Controllers
                 Include(g => g.Genre)
                 .ToList();
 
+            List<FollowingAttendingGig> upcoming = new List<FollowingAttendingGig>();
+
+            foreach (var i in gigs)
+            {
+                FollowingAttendingGig model = new FollowingAttendingGig(i);
+                upcoming.Add(model);
+            }
             var vm = new GigsViewModel
             {
-                UpcomingGigs = gigs,
+                UpcomingGigs = upcoming,
                 ShowActions = User.Identity.IsAuthenticated,
                 Heading = "Gigs I'm Attending"
             };
 
             return View("Gigs",vm);
+        }
+
+
+        [HttpPost]
+        public ActionResult Search(GigsViewModel vm)
+        {
+            return RedirectToAction("Index", "Home", new { query = vm.SearchTerm });
         }
 
         [Authorize]
@@ -80,6 +94,32 @@ namespace Mini_Social_Networking_Web_App.Controllers
             return View("GigForm",viewModel);
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Details(Gig gig)
+        {
+            var Artist = _context.Users.Single(u => u.Id == gig.ArtistId);
+            var Details = new GigDetailsViewModel(Artist.Name,gig.Venue, gig.DateTime , gig.ArtistId);
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+
+                Details.IsAuthenticated = true;
+
+                if (_context.Attendances.Any(a => a.GigId == gig.Id && a.AttendeeId == userId))
+                    Details.IsAttendding = true;
+                
+
+                if (_context.Followings.Any(F => F.FolloweeId == Artist.Id && F.FollowerId == userId))
+                    Details.IsFollowing = true;
+            }
+
+            return View(Details);
+
+
+        }
+
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -103,13 +143,12 @@ namespace Mini_Social_Networking_Web_App.Controllers
 
 
 
-var gig = new Gig(userId, vm.Genre , vm.GetDateTime() , vm.Venue, Followers);
-            _context.Gigs.Add(gig);
-            _context.SaveChanges();
+                var gig = new Gig(userId, vm.Genre , vm.GetDateTime() , vm.Venue, Followers);
+                            _context.Gigs.Add(gig);
+                            _context.SaveChanges();
 
             return RedirectToAction("Mine","Gigs");
-
-        }
+}
 
         [Authorize]
         [HttpPost]

@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
+using System.Data.Entity;
 namespace Mini_Social_Networking_Web_App.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
@@ -37,6 +37,7 @@ namespace Mini_Social_Networking_Web_App.Models
         {
             UserNotifications.Add(new UserNotification(this, notification));
         }
+
 
     }
 

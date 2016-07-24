@@ -20,10 +20,16 @@ namespace Mini_Social_Networking_Web_App.Models
         [Column(Order = 2)]
         public string FolloweeId { get; set; }
 
-        public void AddToUsersFollowingsCollection()
+        public Followings()
         {
-            Follower.Followees.Add(this);
-            Followee.Followers.Add(this);
+
         }
+
+        public Followings(string followerId, string followeeId)
+        {
+            FollowerId = followerId;
+            FolloweeId = followeeId;
+        }
+
     }
 }

@@ -24,7 +24,7 @@ namespace Mini_Social_Networking_Web_App.Models
 
         [Required]
         [StringLength(255)]
-        public string Venue { get; private set; }
+        public string Venue { get; set; }
 
       
         public Genre Genre { get; set; }

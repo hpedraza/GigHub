@@ -4,50 +4,83 @@
     ViewBag.Title = "Home Page";
 }
 <h1>@Model.Heading</h1>
+@using (Html.BeginForm("Search", "Gigs"))
+{
+    <div class="form-group">
+        <div class="input-group" id="searchGig">
+            @Html.TextBoxFor(s => s.SearchTerm, new { @class = "form-control" , placeholder = "Search by artist, genre, or venue" })
+            <span class="input-group-addon">
+                <i class="glyphicon glyphicon-search" ></i>
+            </span>
+        </div>
+    </div>
+
+}
 <ul class="gigs flex-container" style="margin-top: 40px;">
     @foreach (var gig in Model.UpcomingGigs)
     {
         <li class="flex-item-container">
             <div class="date flex-item">
                 <div class="month">
-                    @gig.DateTime.ToString("MMM")
+                    @gig.Gig.DateTime.ToString("MMM")
                 </div>
                 <div class="day">
-                    @gig.DateTime.ToString("d ")
+                    @gig.Gig.DateTime.ToString("d ")
                 </div>
             </div>
             <div class="details flex-item">
                 <span class="artist">
-                    @gig.Artist.Name
+                    @using (Html.BeginForm("Details", "Gigs", gig.Gig, FormMethod.Post))
+                    {
+                        <input type="submit" class="btn btn-link" value="@gig.Gig.Artist.Name" />
+                    }
 
 
                     @if (Model.ShowActions)
                     {
-                        if (@gig.IsCanceled)
+                        if (@gig.Gig.IsCanceled)
                         {
                             <span class="label label-warning pull-right">Canceled</span>
                         }
                         else
                         {
-                            <button data-artist-id="@gig.ArtistId" class="btn btn-link btn-sm js-toggle-following pull-right">Follow</button>
+                            if (gig.IsFollowingArtist)
+                            {
+                                <button data-artist-id="@gig.Gig.ArtistId" class="btn btn-info btn-xs js-toggle-following pull-right">Following</button>
+                            }
+                            else
+                            {
+                                <button data-artist-id="@gig.Gig.ArtistId" class="btn btn-link btn-xs js-toggle-following pull-right">Follow</button>
+                            }
+
                         }
 
                     }
 
                 </span>
                 <span class="genre">
-                    @gig.Genre.Name
-                    @if (Model.ShowActions && !gig.IsCanceled)
+                    @gig.Gig.Genre.Name
+                    @if (Model.ShowActions && !gig.Gig.IsCanceled)
                     {
-                        <button data-gig-id="@gig.Id" class="btn btn-sm btn-default js-toggle-attendance pull-right">Going ?</button>
+                        if (gig.IsAttending)
+                        {
+                            <button data-gig-id="@gig.Gig.Id" class="btn btn-sm btn-info js-toggle-attendance pull-right">Going ?</button>
+                        }
+                        else
+                        {
+                            <button data-gig-id="@gig.Gig.Id" class="btn btn-sm btn-default js-toggle-attendance pull-right">Going ?</button>  
+                        }
+
                     }
 
-                </span>
+            </span>
 
-            </div>
-        </li>
-    }
-</ul>
+        </div>
+    </li>
+                    }
+                </ul>
+
+
 
 @section scripts{
     <script>
@@ -68,10 +101,30 @@
 
             $(".js-toggle-following").click(function (e) {
                 var button = $(e.target);
-                $.post("/api/following", { ArtistId: button.attr("data-artist-id") })
-                .done(function () {
-                    button
-                        .text("Following");
+
+                var dto = {
+                    ArtistId: button.attr("data-artist-id")
+                }
+                if (button.text() === "Follow") {
+                    dto.Follow = true;
+                } else {
+                    dto.Follow = false;
+                }
+
+
+                $.post("/api/following", dto)
+                .done(function (IsFollowing) {
+                    if (IsFollowing) {
+                        button
+                            .text("Following")
+                            .removeClass("btn-link")
+                            .addClass("btn-info");
+                    } else {
+                        button
+                            .text("Following")
+                            .removeClass("btn-info")
+                            .addClass("btn-link");
+                    }
                 })
                 .fail(function () {
                     alert("Something failed!!");

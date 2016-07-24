@@ -72,6 +72,7 @@ h6,
 .form-control{
     font-size: 17px;
     height: 44px;
+    transition: none;
 }
 
 .gig-create-btn{
@@ -186,7 +187,6 @@ span.field-validation-error{
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-
 }
 
 .flex-item-container{
@@ -195,7 +195,7 @@ span.field-validation-error{
     align-content: flex-start;
 }
 
-.flex-item{
+.flex-item {
     width: 265px;
     height: 100px;
     flex-basis: auto;
@@ -204,7 +204,7 @@ span.field-validation-error{
 
 .gigs > li .actions {
     font-size: 15px;
-    display: none;
+    display: block;
 }
 
 .gigs > li:hover .actions {
@@ -230,3 +230,31 @@ span.field-validation-error{
 .popover-notifications ul.notifications .highlight{
     font-weight: bold;
 }
+
+#searchGig{
+    width: 300px;
+    font-size: 4px;
+}
+
+#searchGig > .form-control{
+    font-size: 16.43px;
+}
+
+.artist > form input{
+    padding-left: 0px;
+    font-size: 17px;
+   
+}
+
+.artist > form{
+    display: inline-block;
+
+}
+
+.gigs > li .genre span.highlight{
+    font-weight: 700;
+}
+
+
+
+

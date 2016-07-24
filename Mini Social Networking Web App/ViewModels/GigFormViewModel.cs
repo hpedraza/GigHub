@@ -47,8 +47,8 @@ namespace Mini_Social_Networking_Web_App.ViewModels
             }
         }
 
-
-//------ GigFormViewModel Functions
+/////////////////////////////////////
+//------ Functions
 //
 //
         public DateTime GetDateTime()
@@ -64,10 +64,12 @@ namespace Mini_Social_Networking_Web_App.ViewModels
             Genres = genres;
         }
 
-        //------ GigFormViewModel Constructors
-        //
-        //
+//////////////////////////////////////
+//------ Constructors
+//
+//
         public GigFormViewModel() { }
+
         public GigFormViewModel(int gigId , IEnumerable<Genre> genres, string Date, string Time, byte GenreId, string venue, string heading)
         {
             Id = gigId;
