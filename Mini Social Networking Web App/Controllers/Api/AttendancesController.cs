@@ -20,26 +20,42 @@ namespace Mini_Social_Networking_Web_App.Controllers
         {
             _context = new ApplicationDbContext();
         }
-
-        [HttpPost]
-        public IHttpActionResult Attend(AttendanceDTO dto)
+        [HttpDelete]
+        public IHttpActionResult DeleteAttendance(int id)
         {
             var userId = User.Identity.GetUserId();
-
-            if (_context.Attendances.Any(a => a.AttendeeId == userId && a.GigId == dto.GigId))
+            try
             {
-                return BadRequest("Attendance already exists.");
+                var remove = _context.Attendances.Single(x => x.AttendeeId == userId && x.GigId == id);
+               _context.Attendances.Remove(remove);
             }
-            var attendance = new Attendance
+            catch
             {
-                GigId = dto.GigId,
-                AttendeeId = userId
-            };
-            _context.Attendances.Add(attendance);
+               return NotFound();
+            }
+
             _context.SaveChanges();
-
-            return Ok();
-
+            return Ok(id);
         }
+        [HttpPost]
+         public IHttpActionResult Attend(AttendanceDTO dto)
+         {
+             var userId = User.Identity.GetUserId();
+
+             if (_context.Attendances.Any(a => a.AttendeeId == userId && a.GigId == dto.GigId))
+             {
+                 return BadRequest("Attendance already exists.");
+             }
+             var attendance = new Attendance
+             {
+                 GigId = dto.GigId,
+                 AttendeeId = userId
+             };
+             _context.Attendances.Add(attendance);
+             _context.SaveChanges();
+
+             return Ok();
+
+         }
     }
 }

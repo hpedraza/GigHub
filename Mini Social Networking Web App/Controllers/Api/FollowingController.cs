@@ -49,7 +49,7 @@ namespace Mini_Social_Networking_Web_App.Controllers
                 }
                 catch 
                 {
-                    return true;
+                    return false;
                 }
 
                 return false;

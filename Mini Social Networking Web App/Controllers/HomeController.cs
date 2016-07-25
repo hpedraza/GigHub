@@ -21,12 +21,12 @@ namespace Mini_Social_Networking_Web_App.Controllers
 
         public ActionResult Index(string query = null)
         {
-            List<FollowingAttendingGig> upcoming = new List<FollowingAttendingGig>();
 
             var upcomingGigs = _context.Gigs
                 .Include(global => global.Artist)
                 .Include(g => g.Genre)
                 .Where(g => g.DateTime > DateTime.Now && !g.IsCanceled);
+
 
             if(!String.IsNullOrWhiteSpace(query))
             {
@@ -37,26 +37,23 @@ namespace Mini_Social_Networking_Web_App.Controllers
                             g.Venue.Contains(query));
             }
 
+            var viewModel = new GigsViewModel
+            {
+                UpcomingGigs = upcomingGigs.ToList(),
+                ShowActions = User.Identity.IsAuthenticated,
+                Heading = "Upcoming Gigs"
+            };
+
             if (User.Identity.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
+                var attendances = _context.Attendances.Where(x => x.AttendeeId == userId && x.Gig.DateTime > DateTime.Now).ToList().ToLookup(a => a.GigId);
+                var followings = _context.Followings.Where(x => x.FollowerId == userId).ToList().ToLookup(x => x.FolloweeId);
 
-                foreach (var gig in upcomingGigs)
-                {
-                    var model = new FollowingAttendingGig();
-                    IsAttendingOrFollowing(gig, userId, ref model);
-                    upcoming.Add(model);
-
-                }
+               viewModel.Attendances = attendances;
+               viewModel.Followings = followings;
             }
 
-            var viewModel = new GigsViewModel
-            {
-                UpcomingGigs = upcoming,
-                ShowActions = User.Identity.IsAuthenticated,
-                Heading = "Upcoming Gigs",
-                SearchTerm = query
-            };
 
             return View("Gigs" , viewModel);
         }

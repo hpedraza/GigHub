@@ -19,5 +19,12 @@ namespace Mini_Social_Networking_Web_App.Models
         [Key]
         [Column(Order = 2)]
         public string AttendeeId { get; set; }
+
+        public Attendance(){}
+        public Attendance(int gigId , string attendeeId)
+        {
+            AttendeeId = attendeeId;
+            GigId = gigId;
+        }
     }
 }

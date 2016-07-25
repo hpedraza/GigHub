@@ -42,22 +42,19 @@ namespace Mini_Social_Networking_Web_App.Controllers
             var gigs = _context.Attendances
                 .Where(a => a.AttendeeId == userId)
                 .Select(a => a.Gig)
-                .Include(g => g.Artist).
-                Include(g => g.Genre)
+                .Include(g => g.Artist)
+                .Include(g => g.Genre)
                 .ToList();
 
-            List<FollowingAttendingGig> upcoming = new List<FollowingAttendingGig>();
-
-            foreach (var i in gigs)
-            {
-                FollowingAttendingGig model = new FollowingAttendingGig(i);
-                upcoming.Add(model);
-            }
+            var attendances = _context.Attendances.Where(x => x.AttendeeId == userId && x.Gig.DateTime > DateTime.Now).ToList().ToLookup(a => a.GigId);
+            var followings = _context.Followings.Where(x => x.FollowerId == userId).ToList().ToLookup(x => x.FolloweeId);
             var vm = new GigsViewModel
             {
-                UpcomingGigs = upcoming,
+                UpcomingGigs = gigs,
                 ShowActions = User.Identity.IsAuthenticated,
-                Heading = "Gigs I'm Attending"
+                Heading = "Gigs I'm Attending",
+                Attendances = attendances,
+                Followings = followings
             };
 
             return View("Gigs",vm);
@@ -96,10 +93,13 @@ namespace Mini_Social_Networking_Web_App.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Details(Gig gig)
+        public ActionResult Details(int gigId)
         {
-            var Artist = _context.Users.Single(u => u.Id == gig.ArtistId);
-            var Details = new GigDetailsViewModel(Artist.Name,gig.Venue, gig.DateTime , gig.ArtistId);
+            var gig = _context.Gigs
+                .Include(x => x.Artist)
+                .Single(g => g.Id == gigId);
+
+            var Details = new GigDetailsViewModel(gig.Artist.Name,gig.Venue, gig.DateTime , gig.ArtistId);
 
             if (User.Identity.IsAuthenticated)
             {
@@ -107,12 +107,9 @@ namespace Mini_Social_Networking_Web_App.Controllers
 
                 Details.IsAuthenticated = true;
 
-                if (_context.Attendances.Any(a => a.GigId == gig.Id && a.AttendeeId == userId))
-                    Details.IsAttendding = true;
-                
-
-                if (_context.Followings.Any(F => F.FolloweeId == Artist.Id && F.FollowerId == userId))
-                    Details.IsFollowing = true;
+                Details.IsAttendding = _context.Attendances.Any(a => a.GigId == gig.Id && a.AttendeeId == userId);
+               
+                Details.IsFollowing = _context.Followings.Any(F => F.FolloweeId == gig.Artist.Id && F.FollowerId == userId);
             }
 
             return View(Details);
