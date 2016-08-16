@@ -8,6 +8,14 @@ namespace Mini_Social_Networking_Web_App
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.Add(new ScriptBundle("~/bundles/app").Include(
+                    "~/Scripts/App/Services/attendanceService.js",
+                    "~/Scripts/App/Controllers/gigsController.js",
+                    "~/Scripts/App/app.js",
+                    "~/Scripts/App/Services/followService.js",
+                    "~/Scripts/App/Controllers/followController.js"
+                ));
+
             bundles.Add(new ScriptBundle("~/bundles/lib").Include(
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/underscore-min.js",

@@ -16,7 +16,7 @@
     </div>
 
 }
-<ul class="gigs flex-container" style="margin-top: 40px;">
+<ul id="gigs" class="gigs flex-container" style="margin-top: 40px;">
     @foreach (var gig in Model.UpcomingGigs)
     {
         <li class="flex-item-container">
@@ -76,73 +76,11 @@
 </ul>
 
 
-
-
-
-
-
 @section scripts{
     <script>
         $(document).ready(function () {
-
-            $(".js-toggle-attendance").click( function(e) {
-                var button = $(e.target);
-                if (button.hasClass("btn-default")) {
-                    $.post("/api/attendances", { GigId: button.attr("data-gig-id") })
-                    .done(function () {
-                        button
-                            .removeClass("btn-default")
-                            .addClass("btn-info")
-                            .text("Going");
-                    })
-                    .fail(function () {
-                        alert("Something failed!!");
-                    });
-                } else {
-                    $.ajax({
-                        url: "/api/attendances/" + button.attr("data-gig-id"),
-                        method: "DELETE"
-                    })
-                        .done(function () {
-                            button
-                                .removeClass("btn-info")
-                                .addClass("btn-default")
-                                .text("Going?");
-                        })
-                        .fail(function () {
-                            alert("Error: Failed");
-                    });
-                }
-            });
-
-            $(".js-toggle-following").click(function (e) {
-                var button = $(e.target);
-
-                var dto = {
-                    ArtistId: button.attr("data-artist-id")
-                }
-                if (button.text() === "Follow") {
-                    dto.Follow = true;
-                } else {
-                    dto.Follow = false;
-                }
-
-
-                $.post("/api/following", dto)
-                .done(function (IsFollowing) {
-                    if (IsFollowing) {
-                        button
-                            .text("Following");
-                    } else {
-                        button
-                            .text("Follow");
-                    }
-                })
-                .fail(function () {
-                    alert("Something failed!!");
-                });
-            });
-
+            GigsController.init("#gigs");
+            followController.init("#gigs");
         });
     </script>
 }

@@ -6,18 +6,25 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using System.Collections.Generic;
 using System;
-
+using Mini_Social_Networking_Web_App.Repositories;
 namespace Mini_Social_Networking_Web_App.Controllers
 {
     public class GigsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly AttendanceRepository _attendanceRepository;
+        private readonly FollowingRepository _followingRepository;
+        private readonly GigRepository _gigRepository;
+        
 
         public GigsController()
         {
             // worrt about Dependency Injection, repository pattern later 
             
             _context = new ApplicationDbContext();
+            _attendanceRepository = new AttendanceRepository(_context);
+            _followingRepository = new FollowingRepository(_context);
+            _gigRepository = new GigRepository(_context);
         }
 
         [Authorize]
@@ -39,26 +46,20 @@ namespace Mini_Social_Networking_Web_App.Controllers
         public ActionResult Attending()
         {
             var userId = User.Identity.GetUserId();
-            var gigs = _context.Attendances
-                .Where(a => a.AttendeeId == userId)
-                .Select(a => a.Gig)
-                .Include(g => g.Artist)
-                .Include(g => g.Genre)
-                .ToList();
 
-            var attendances = _context.Attendances.Where(x => x.AttendeeId == userId && x.Gig.DateTime > DateTime.Now).ToList().ToLookup(a => a.GigId);
-            var followings = _context.Followings.Where(x => x.FollowerId == userId).ToList().ToLookup(x => x.FolloweeId);
             var vm = new GigsViewModel
             {
-                UpcomingGigs = gigs,
+                UpcomingGigs = _gigRepository.GetGigsUserAttending(userId),
                 ShowActions = User.Identity.IsAuthenticated,
                 Heading = "Gigs I'm Attending",
-                Attendances = attendances,
-                Followings = followings
+                Attendances = _attendanceRepository.GetFutureAttendances(userId).ToLookup(a => a.GigId),
+                Followings = _followingRepository.GetFollowers(userId).ToLookup(x => x.FolloweeId)
             };
 
             return View("Gigs",vm);
         }
+
+
 
 
         [HttpPost]

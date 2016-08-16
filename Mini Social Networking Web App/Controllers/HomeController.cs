@@ -6,7 +6,7 @@ using System.Data.Entity;
 using Mini_Social_Networking_Web_App.ViewModels;
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
-
+using Mini_Social_Networking_Web_App.Repositories;
 namespace Mini_Social_Networking_Web_App.Controllers
 {
 
@@ -14,9 +14,11 @@ namespace Mini_Social_Networking_Web_App.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext _context;
+        private readonly AttendanceRepository _attendanceRepository;
         public HomeController()
         {
             _context = new ApplicationDbContext();
+            _attendanceRepository = new AttendanceRepository(_context);
         }
 
         public ActionResult Index(string query = null)
@@ -47,8 +49,12 @@ namespace Mini_Social_Networking_Web_App.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
-                var attendances = _context.Attendances.Where(x => x.AttendeeId == userId && x.Gig.DateTime > DateTime.Now).ToList().ToLookup(a => a.GigId);
-                var followings = _context.Followings.Where(x => x.FollowerId == userId).ToList().ToLookup(x => x.FolloweeId);
+                var attendances = _attendanceRepository.GetFutureAttendances(userId).ToLookup(a => a.GigId);
+
+                var followings = _context.Followings
+                    .Where(x => x.FollowerId == userId)
+                    .ToList()
+                    .ToLookup(x => x.FolloweeId);
 
                viewModel.Attendances = attendances;
                viewModel.Followings = followings;

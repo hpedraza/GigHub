@@ -46,10 +46,7 @@ namespace Mini_Social_Networking_Web_App.Models
                 .WithMany(u => u.UserNotifications)
                 .WillCascadeOnDelete(false);
 
-             modelBuilder.Entity<Followings>()
-                .HasRequired(a => a.Follower)
-                .WithMany(a => a.Followees)
-                .WillCascadeOnDelete(false); 
+
 
 
             base.OnModelCreating(modelBuilder);
