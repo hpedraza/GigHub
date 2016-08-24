@@ -8,8 +8,8 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Mini_Social_Networking_Web_App.Models;
-using Mini_Social_Networking_Web_App.ViewModels;
+using Mini_Social_Networking_Web_App.Core.Models;
+using Mini_Social_Networking_Web_App.Core.ViewModels;
 
 namespace Mini_Social_Networking_Web_App.Controllers
 {

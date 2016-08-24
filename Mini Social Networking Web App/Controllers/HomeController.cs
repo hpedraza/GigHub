@@ -1,34 +1,35 @@
-﻿using Mini_Social_Networking_Web_App.Models;
+﻿using Mini_Social_Networking_Web_App.Core.Models;
 using System;
 using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
-using Mini_Social_Networking_Web_App.ViewModels;
+using Mini_Social_Networking_Web_App.Core.ViewModels;
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
-using Mini_Social_Networking_Web_App.Repositories;
+using Mini_Social_Networking_Web_App.Core.Repositories;
+using Mini_Social_Networking_Web_App.Persistance;
+using Mini_Social_Networking_Web_App.Persistance.Repositories;
+
 namespace Mini_Social_Networking_Web_App.Controllers
 {
 
 
     public class HomeController : Controller
     {
-        private ApplicationDbContext _context;
-        private readonly AttendanceRepository _attendanceRepository;
-        public HomeController()
+
+        private IUnitOfWork _unitOfWork;
+
+        public HomeController(IUnitOfWork UnitOfWork)
         {
-            _context = new ApplicationDbContext();
-            _attendanceRepository = new AttendanceRepository(_context);
+
+            _unitOfWork = UnitOfWork;
         }
 
         public ActionResult Index(string query = null)
         {
 
-            var upcomingGigs = _context.Gigs
-                .Include(global => global.Artist)
-                .Include(g => g.Genre)
-                .Where(g => g.DateTime > DateTime.Now && !g.IsCanceled);
-
+            var upcomingGigs = _unitOfWork.Gigs.GetAllUpcomingGigs();
+                
 
             if(!String.IsNullOrWhiteSpace(query))
             {
@@ -49,15 +50,13 @@ namespace Mini_Social_Networking_Web_App.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
-                var attendances = _attendanceRepository.GetFutureAttendances(userId).ToLookup(a => a.GigId);
 
-                var followings = _context.Followings
-                    .Where(x => x.FollowerId == userId)
-                    .ToList()
-                    .ToLookup(x => x.FolloweeId);
+                var attendances = _unitOfWork.Attendances.GetFutureAttendances(userId).ToLookup(a => a.GigId);
 
-               viewModel.Attendances = attendances;
-               viewModel.Followings = followings;
+                var followings = _unitOfWork.Followings.CreateUserFollowingsLookUp(userId);
+
+                viewModel.Attendances = attendances;
+                viewModel.Followings = followings;
             }
 
 
@@ -69,7 +68,7 @@ namespace Mini_Social_Networking_Web_App.Controllers
             model.Gig = gig;
 
             // Check too see if user is attending Gig
-            if (_context.Attendances.Any(a => a.AttendeeId == userId && a.GigId == gig.Id))
+            if (_unitOfWork.Attendances.GetAttendance(gig.Id , userId) != null )
             {
                 model.IsAttending = true;
             }
@@ -80,7 +79,7 @@ namespace Mini_Social_Networking_Web_App.Controllers
             }
 
             //check to see if user is following artist
-            if (_context.Followings.Any(f => f.FollowerId == userId && f.FolloweeId == gig.Artist.Id))
+            if ( _unitOfWork.Followings.GetFollowing(gig.Artist.Id , userId) != null )
             {
                 model.IsFollowingArtist = true;
             }

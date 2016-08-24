@@ -10,8 +10,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using Mini_Social_Networking_Web_App.Models;
-
+using Mini_Social_Networking_Web_App.Core.Models;
+using Mini_Social_Networking_Web_App.Persistance;
 namespace Mini_Social_Networking_Web_App
 {
     public class EmailService : IIdentityMessageService

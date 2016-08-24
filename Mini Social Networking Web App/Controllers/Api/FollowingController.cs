@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNet.Identity;
-using Mini_Social_Networking_Web_App.DTO;
-using Mini_Social_Networking_Web_App.Models;
 using System;
 using System.Linq;
 using System.Web.Http;
 using System.Data;
+using Mini_Social_Networking_Web_App.Core.DTO;
+using Mini_Social_Networking_Web_App.Persistance;
+using Mini_Social_Networking_Web_App.Core.Models;
+
 namespace Mini_Social_Networking_Web_App.Controllers
 {
     [Authorize]

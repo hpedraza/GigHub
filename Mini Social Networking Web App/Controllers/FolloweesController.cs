@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNet.Identity;
-using Mini_Social_Networking_Web_App.Models;
-using Mini_Social_Networking_Web_App.ViewModels;
+using Mini_Social_Networking_Web_App.Core.Models;
+using Mini_Social_Networking_Web_App.Core.Repositories;
+using Mini_Social_Networking_Web_App.Core.ViewModels;
+using Mini_Social_Networking_Web_App.Persistance;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,29 +13,33 @@ namespace Mini_Social_Networking_Web_App.Controllers
 {
     public class FolloweesController : Controller
     {
-        private ApplicationDbContext _context;
-        public FolloweesController()
+        private readonly IUnitOfWork _unitOfWork;
+        public FolloweesController(IUnitOfWork UnitOfWork)
         {
-            _context = new ApplicationDbContext();
+            _unitOfWork = UnitOfWork;
         }
 
         [Authorize]
         public ActionResult Index()
         {
             var userId = User.Identity.GetUserId();
-            var FolloweeIds = _context.Followings.Where(u => u.FollowerId == userId).Select(u => u.FolloweeId).ToList();
+
+            var FolloweeIds =  _unitOfWork.Followings.GetUsersFolloweeIds(userId)
+                .Select(u => u.Id)
+                .ToList();
+
             IList<FollowingViewModel> viewModel = new List<FollowingViewModel>();
 
             for (int i = 0; i < FolloweeIds.Count; i++)
             {
                 string id = FolloweeIds[i];
-                var userName = _context.Users.Where(u => u.Id == id).Select(u => u.Name).Single<string>();
+                var userName = _unitOfWork.Users.GetUser(id);
 
                 if (userName != null)
                 {
                     viewModel.Add(new FollowingViewModel
                     {
-                        UserName = userName,
+                        UserName = userName.Name,
                         Id = id
                     });
                 }

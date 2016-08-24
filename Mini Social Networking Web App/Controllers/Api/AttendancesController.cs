@@ -1,4 +1,4 @@
-﻿using Mini_Social_Networking_Web_App.Models;
+﻿using Mini_Social_Networking_Web_App.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,9 @@ using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Mini_Social_Networking_Web_App.DTO;
+using Mini_Social_Networking_Web_App.Core.DTO;
+using Mini_Social_Networking_Web_App.Persistance;
+using Mini_Social_Networking_Web_App.Core.Models;
 
 namespace Mini_Social_Networking_Web_App.Controllers
 {

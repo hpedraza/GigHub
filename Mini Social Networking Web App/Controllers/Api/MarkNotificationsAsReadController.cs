@@ -4,11 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Mini_Social_Networking_Web_App.Models;
-using Mini_Social_Networking_Web_App.DTO;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
 using System.Data.Entity;
+using Mini_Social_Networking_Web_App.Core.DTO;
+using Mini_Social_Networking_Web_App.Persistance;
+
 namespace Mini_Social_Networking_Web_App.Controllers.Api
 { 
     [Authorize]

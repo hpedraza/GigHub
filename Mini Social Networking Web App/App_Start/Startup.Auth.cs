@@ -5,7 +5,8 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using Mini_Social_Networking_Web_App.Models;
+using Mini_Social_Networking_Web_App.Core.Models;
+using Mini_Social_Networking_Web_App.Persistance;
 
 namespace Mini_Social_Networking_Web_App
 {
